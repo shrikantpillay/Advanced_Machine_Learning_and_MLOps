@@ -10,9 +10,18 @@ from sklearn.preprocessing import LabelEncoder
 # for hugging face space authentication to upload files
 from huggingface_hub import login, HfApi
 
+# Change the path to use the valid Hugging Face dataset repository format
+DATASET_REPO = "shrikantpillay/Advanced_Machine_Learning_and_MLOps"
+DATASET_PATH = f"hf://datasets/{DATASET_REPO}/tourism.csv"
+
+# Your line 16 will then execute cleanly:
+df = pd.read_csv(DATASET_PATH)
+
 # Define constants for the dataset and output paths
 api = HfApi(token=os.getenv("HF_TOKEN"))
-DATASET_PATH = "hf://Advance Machine learning and MLOPS/tourism.csv"
+# Your line 16 will then execute cleanly:
+df = pd.read_csv(DATASET_PATH)
+# DATASET_PATH = "hf://Advance Machine learning and MLOPS/tourism.csv"
 df = pd.read_csv(DATASET_PATH)
 print("Dataset loaded successfully.")
 
