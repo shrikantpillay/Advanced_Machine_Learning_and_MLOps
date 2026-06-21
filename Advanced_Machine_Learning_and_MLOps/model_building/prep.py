@@ -12,7 +12,12 @@ from huggingface_hub import login, HfApi
 
 # Define constants for the dataset and output paths
 api = HfApi(token=os.getenv("HF_TOKEN"))
-DATASET_PATH = "hf://shrikantpillay/Advanced_Machine_Learning_and_MLOps/tourism.csv"
+
+# FIX 1: Change to your actual HF username/org and use a space-free repository name
+REPO_ID = "YOUR_HF_USERNAME_OR_ORG/advanced-ml-and-mlops"
+
+# FIX 2: Correct the hf:// URI using the clean repo ID
+DATASET_PATH = f"hf://datasets/{REPO_ID}/tourism.csv"
 df = pd.read_csv(DATASET_PATH)
 print("Dataset loaded successfully.")
 
@@ -34,18 +39,17 @@ Xtrain, Xtest, ytrain, ytest = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-Xtrain.to_csv("Xtrain.csv",index=False)
-Xtest.to_csv("Xtest.csv",index=False)
-ytrain.to_csv("ytrain.csv",index=False)
-ytest.to_csv("ytest.csv",index=False)
+Xtrain.to_csv("Xtrain.csv", index=False)
+Xtest.to_csv("Xtest.csv", index=False)
+ytrain.to_csv("ytrain.csv", index=False)
+ytest.to_csv("ytest.csv", index=False)
 
-
-files = ["Xtrain.csv","Xtest.csv","ytrain.csv","ytest.csv"]
+files = ["Xtrain.csv", "Xtest.csv", "ytrain.csv", "ytest.csv"]
 
 for file_path in files:
     api.upload_file(
         path_or_fileobj=file_path,
         path_in_repo=file_path.split("/")[-1],  # just the filename
-        repo_id="Advance Machine learning and MLOPS/data",
+        repo_id=REPO_ID,                        # FIX 3: Cleaned up repo id
         repo_type="dataset",
     )
