@@ -57,7 +57,7 @@ print("Uploading processed splits to Hugging Face...")
 for file_path in files:
     api.upload_file(
         path_or_fileobj=file_path,
-        path_in_repo=file_path,  # Saves directly into the dataset hub
+        path_in_repo=file_path,  
         repo_id=REPO_ID,
         repo_type="dataset",
     )
