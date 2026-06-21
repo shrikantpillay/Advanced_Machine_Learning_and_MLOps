@@ -1,43 +1,35 @@
-from huggingface_hub.utils import RepositoryNotFoundError, HfHubHTTPError
-from huggingface_hub import HfApi, create_repo
 import os
-
+from huggingface_hub import HfApi, create_repo
+from huggingface_hub.utils import RepositoryNotFoundError, HfHubHTTPError
 
 repo_id = "shrikantpillay/Advanced_Machine_Learning_and_MLOps"
 repo_type = "dataset"
 
-# Initialize API client
-api = HfApi(token=os.getenv("HF_TOKEN"))
+# Initialize API client with token
+token = os.getenv("HF_TOKEN")
+api = HfApi(token=token)
 
-# Step 1: Check if the space exists
+# Step 1: Check if the repository/dataset exists
 try:
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
-    print(f"Space '{repo_id}' already exists. Using it.")
+    print(f"Dataset repo '{repo_id}' already exists. Using it.")
 except RepositoryNotFoundError:
-    print(f"Space '{repo_id}' not found. Creating new space...")
-    create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
-    print(f"Space '{repo_id}' created.")
+    print(f"Dataset repo '{repo_id}' not found. Creating new repository...")
+    # Using api.create_repo ensuring your token auth carries over
+    api.create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
+    print(f"Dataset repo '{repo_id}' created.")
 
-import os
-
-# 1. Get the directory where data_register.py is actually located
+# Step 2: Dynamically locate the 'data' folder relative to this script
 current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# 2. Safely jump up one level to 'Advanced_Machine_Learning_and_MLOps' and into 'data'
 data_folder_path = os.path.normpath(os.path.join(current_dir, "..", "data"))
 
 print(f"DEBUG: Attempting to upload folder from path: {data_folder_path}")
 
-# 3. Update your upload call to use this dynamic path
+# Step 3: Upload files to Hugging Face
 api.upload_folder(
     folder_path=data_folder_path,
     repo_id=repo_id,
     repo_type=repo_type,
-    # ... keep your existing repo settings below
 )
 
-api.upload_folder(
-    folder_path=data_folder_path,
-    repo_id=repo_id,
-    repo_type=repo_type,
-)
+print("Upload complete!")
