@@ -10,14 +10,16 @@ from sklearn.preprocessing import LabelEncoder
 # for hugging face space authentication to upload files
 from huggingface_hub import login, HfApi
 
-# Define constants for the dataset and output paths
-api = HfApi(token=os.getenv("HF_TOKEN"))
+# Initialize API and authenticate
+token = os.getenv("HF_TOKEN")
+api = HfApi(token=token)
 
-# FIX 1: Change to your actual HF username/org and use a space-free repository name
-REPO_ID = "YOUR_HF_USERNAME_OR_ORG/advanced-ml-and-mlops"
+# 1. EXACT REPO DETAILS FROM YOUR HUGGING FACE SPACE
+REPO_ID = "shrikantpillay/Advanced_Machine_Learning_and_MLOps"
 
-# FIX 2: Correct the hf:// URI using the clean repo ID
-DATASET_PATH = f"hf://datasets/{REPO_ID}/tourism.csv"
+# 2. CORRECTED LOCAL PATH FROM YOUR GITHUB SCREENSHOT
+DATASET_PATH = "Advanced_Machine_Learning_and_MLOps/data/tourism.csv"
+
 df = pd.read_csv(DATASET_PATH)
 print("Dataset loaded successfully.")
 
@@ -46,10 +48,12 @@ ytest.to_csv("ytest.csv", index=False)
 
 files = ["Xtrain.csv", "Xtest.csv", "ytrain.csv", "ytest.csv"]
 
+# 3. UPLOAD DIRECTLY TO YOUR HUGGING FACE SPACE ROOT
 for file_path in files:
     api.upload_file(
         path_or_fileobj=file_path,
-        path_in_repo=file_path.split("/")[-1],  # just the filename
-        repo_id=REPO_ID,                        # FIX 3: Cleaned up repo id
-        repo_type="dataset",
+        path_in_repo=file_path.split("/")[-1],  # uploads directly to the root of your Space
+        repo_id=REPO_ID,
+        repo_type="space",                      # correctly targets your Space
     )
+print("All files uploaded to Hugging Face Space successfully!")
