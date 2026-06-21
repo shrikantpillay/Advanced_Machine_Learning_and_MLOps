@@ -19,7 +19,7 @@ except RepositoryNotFoundError:
     print(f"Space '{repo_id}' created.")
 
 api.upload_folder(
-    folder_path="Advance Machine learning and MLOPS/data",
+    folder_path="Advanced_Machine_Learning_and_MLOps/data",
     repo_id=repo_id,
     repo_type=repo_type,
 )
